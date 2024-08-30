@@ -27,6 +27,12 @@ class RevisionableModel(models.Model):
 class Order(models.Model):
     created_by = models.ForeignKey(User, models.CASCADE)
     text = models.TextField()
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, null=True)
+
+    def save(self, *args, **kwargs):
+        if self.product and not self.product.pk:
+            self.product.save()
+        super().save(*args, **kwargs)
 
 
 class TestObject(models.Model):
